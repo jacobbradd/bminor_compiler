@@ -1,0 +1,41 @@
+if(E1) S1
+else S2
+S3
+
+
+E1 -T> S1 -> ENDIF -> S3
+   -F> S2 ->   ^
+
+Assembly:
+.L1: #cond_label
+    E1
+    jne 0, .L2
+    S1
+    jmp 0, .L3
+.L2: #else_label
+    S2
+.L3: #final_label
+    S3
+
+
+for(E1;E2;E3) S1
+S2
+
+ENTR -> E1 -T> S1 -> GOTO(E1)
+           -F> EXIT -> S2
+
+Assembly:
+.L1: #cond_label
+    E1
+    jne 0, .L2
+    S1
+    jmp .L1
+.L2: #else_label
+.L3: #final_label
+    S2
+
+
+############
+Note: .L1 is not needed for the first, while .L2 is not needed for the second.
+.L2 is also not needed if there is no else statement.
+I don't have the ability to check this in the control flow model.
